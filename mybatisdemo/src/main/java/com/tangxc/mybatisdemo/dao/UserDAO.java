@@ -1,7 +1,6 @@
 package com.tangxc.mybatisdemo.dao;
 
 import com.tangxc.mybatisdemo.domain.User;
-import org.apache.ibatis.session.SqlSession;
 
 import java.util.List;
 
@@ -19,11 +18,9 @@ public class UserDAO {
      * @param user
      */
     public void insert(final User user) {
-        DAOTemplate.execute(new MybatisCallback() {
-            public Object doInMybatis(SqlSession sqlSession) {
-                sqlSession.insert("users.insert", user);
-                return null;
-            }
+        DAOTemplate.execute(sqlSession -> {
+            sqlSession.insert("users.insert", user);
+            return null;
         });
     }
 
@@ -33,11 +30,9 @@ public class UserDAO {
      * @param user
      */
     public void update(final User user) {
-        DAOTemplate.execute(new MybatisCallback() {
-            public Object doInMybatis(SqlSession sqlSession) {
-                sqlSession.update("users.update", user);
-                return null;
-            }
+        DAOTemplate.execute(sqlSession -> {
+            sqlSession.update("users.update", user);
+            return null;
         });
     }
 
@@ -48,11 +43,7 @@ public class UserDAO {
      * @return
      */
     public User selectOne(final Integer id) {
-        return (User) DAOTemplate.execute(new MybatisCallback() {
-            public Object doInMybatis(SqlSession sqlSession) {
-                return sqlSession.selectOne("users.selectOne", id);
-            }
-        });
+        return (User) DAOTemplate.execute(sqlSession -> sqlSession.selectOne("users.selectOne", id));
     }
 
     /**
@@ -61,11 +52,7 @@ public class UserDAO {
      * @return
      */
     public List<User> selectAll() {
-        return (List<User>) DAOTemplate.execute(new MybatisCallback() {
-            public Object doInMybatis(SqlSession sqlSession) {
-                return sqlSession.selectList("users.selectAll");
-            }
-        });
+        return (List<User>) DAOTemplate.execute(sqlSession -> sqlSession.selectList("users.selectAll"));
     }
 
 }
